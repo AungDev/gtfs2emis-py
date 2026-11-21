@@ -1,0 +1,9 @@
+{
+  "segments": 5000,
+  "adjust_speeds_ms": 5000,
+  "ef_emep_ms": 10000,
+  "multiply_ef_ms": 2000,
+  "parallel_map_ms": 30000,
+  "serial_map_ms": 30000,
+  "peak_rss_mb": 2048
+}

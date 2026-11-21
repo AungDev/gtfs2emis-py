@@ -1,0 +1,18 @@
+EPA MOVES3 emission factors
+===========================
+
+Source: U.S. Environmental Protection Agency
+https://www.epa.gov/moves
+
+This table is NOT redistributed in the wheel. The Python loader fetches it only
+on request (`load_ef_table("usa_moves", fetch=True)`), downloading the original
+pinned `.rda` from the URL recorded in `manifest.json`.
+
+The EPA MOVES release carries GNU GPL-derived terms. If the table is
+redistributed separately, it must remain under those terms with the GPL notice
+and source information; it cannot be relicensed as MIT. The wheel does not
+include it, and this project makes no claim of GPL compliance for a hosted copy.
+
+The reference table was obtained through ipeaGIT/gtfs2emis v0.1.2 (MIT code),
+commit 0dbca7d779857145888ab695f36dc9e71ff57d98. The R package's MIT licence
+covers its code, not the EPA data.

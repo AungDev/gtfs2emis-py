@@ -1,0 +1,17 @@
+CETESB — Companhia Ambiental do Estado de São Paulo
+===================================================
+
+Source: "Emissões veiculares no estado de São Paulo" (CETESB, 2019)
+https://cetesb.sp.gov.br/veicular/
+
+This table is NOT redistributed in the wheel. The Python loader fetches it only
+on request (`load_ef_table("brazil_cetesb", fetch=True)`), downloading the original
+pinned `.rda` from the URL recorded in `manifest.json`.
+
+No separate licence or redistribution permission for the underlying CETESB data
+was located. It is treated as unlicensed until the source owner provides written
+terms. Attribution alone is not permission to redistribute it.
+
+The reference table was obtained through ipeaGIT/gtfs2emis v0.1.2 (MIT code),
+commit 0dbca7d779857145888ab695f36dc9e71ff57d98. The R package's MIT licence
+covers its code, not the CETESB data.

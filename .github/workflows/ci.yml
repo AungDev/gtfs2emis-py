@@ -1,0 +1,215 @@
+name: CI
+
+# The package root is detected by ./.github/actions/package-root, so this
+# workflow runs unchanged whether pyproject.toml sits at the repository root or
+# in the gtfs2emis-py/ subdirectory. Checks that need the R fixtures or the raw
+# EF generators live in parity.yml instead.
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Pinned so a new uv release cannot change resolution semantics under us.
+  UV_VERSION: "0.13.0"
+
+jobs:
+  lockfile:
+    name: Lockfile is current
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - id: pkg
+        uses: ./.github/actions/package-root
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+      # Fails when pyproject.toml and uv.lock disagree, so a dependency edit
+      # that skipped `uv lock` cannot reach a branch.
+      - name: Check uv.lock is up to date
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: uv lock --check
+
+  lint:
+    name: Lint and type-check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - id: pkg
+        uses: ./.github/actions/package-root
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+      - name: Sync the locked environment
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: uv sync --locked --extra dev
+      - name: Ruff lint
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: uv run ruff check .
+      - name: Ruff format
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: uv run ruff format --check .
+      - name: Mypy
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: uv run mypy src
+
+  test:
+    name: Test (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - id: pkg
+        uses: ./.github/actions/package-root
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+      - name: Sync the locked environment
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: uv sync --locked --extra dev
+      # The development tree ships all four EF tables and keeps the 90 % floor
+      # from [tool.coverage.report] in pyproject.toml. The release tree ships
+      # only the redistributable EMEP table, so the CETESB/EMFAC/MOVES tests
+      # skip and the measurable total is ~80 %; its floor comes from that
+      # measured baseline instead of the development one.
+      - name: Pytest with coverage
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        env:
+          GTFS2EMIS_COVERAGE_SERIAL: "1"
+          COVERAGE_FLOOR: ${{ steps.pkg.outputs.dir == '.' && '78' || '90' }}
+        run: uv run pytest --cov --cov-report=term-missing --cov-fail-under="$COVERAGE_FLOOR"
+      - name: Benchmarks (budget gate)
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: uv run python benchmarks/benchmark.py --segments 5000 --check
+
+  lower-bounds:
+    name: Declared minimum versions
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - id: pkg
+        uses: ./.github/actions/package-root
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+      - name: Sync the locked environment
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: uv sync --locked --extra dev
+      # Exercise the floors that actually have a compatibility meaning:
+      # gtfs-kit 13.0.1 has no 13.0.0, and pandas 2.2.2 is gtfs-kit's own
+      # minimum. numpy and the geo stack keep the locked versions.
+      - name: Install declared minimums
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: uv pip install --python .venv/bin/python "pandas==2.2.2" "gtfs-kit==13.0.1"
+      - name: Pytest against minimums
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: uv run --no-sync pytest -q
+
+  wheel:
+    name: Wheel contents and install
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - id: pkg
+        uses: ./.github/actions/package-root
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+      - name: Sync the locked environment
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: uv sync --locked --extra dev
+      - name: Build distributions
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: uv build --out-dir dist
+      - name: Wheel contains py.typed and package data
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: |
+          uv run python - <<'PY'
+          import glob
+          import sys
+          import zipfile
+
+          wheel = glob.glob("dist/*.whl")[0]
+          names = zipfile.ZipFile(wheel).namelist()
+          required = ["gtfs2emis_py/py.typed"]
+          missing = [name for name in required if name not in names]
+          missing += [] if any(n.startswith("gtfs2emis_py/data/") for n in names) else [
+              "gtfs2emis_py/data/*"
+          ]
+          if missing:
+              sys.exit(f"{wheel} is missing: {missing}")
+          print(f"{wheel}: {len(names)} entries, py.typed and data/ present")
+          PY
+      - name: Install the wheel in a clean environment
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: |
+          uv venv /tmp/wheel-env --python 3.12
+          uv pip install --python /tmp/wheel-env/bin/python dist/*.whl
+          /tmp/wheel-env/bin/python - <<'PY'
+          from importlib import resources
+
+          import gtfs2emis_py
+
+          assert resources.files("gtfs2emis_py").joinpath("py.typed").is_file()
+          assert resources.files("gtfs2emis_py").joinpath("data").is_dir()
+          print(f"imported gtfs2emis_py {gtfs2emis_py.__version__} from the wheel")
+          PY
+
+  docs:
+    name: Documentation
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - id: pkg
+        uses: ./.github/actions/package-root
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+      - name: Sync the documentation environment
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: uv sync --locked --extra dev --extra docs --extra notebooks
+      # conf.py exists, so the build must stay warning-free.
+      - name: Build the docs
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: uv run sphinx-build -W -b html docs docs/_build
+      - name: Execute the tutorial notebooks
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: uv run python notebooks/execute.py

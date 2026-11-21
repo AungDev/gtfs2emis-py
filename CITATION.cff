@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "gtfs2emis-py: Estimating public transport emissions from GTFS data"
+abstract: "A Python port of the R gtfs2emis package for estimating public transport emissions from GTFS feeds."
+type: software
+authors:
+  - name: "gtfs2emis-py contributors"
+repository-code: "https://github.com/AungDev/gtfs2emis-py"
+url: "https://github.com/AungDev/gtfs2emis-py"
+license: MIT
+keywords:
+  - gtfs
+  - emissions
+  - public transport
+  - air quality

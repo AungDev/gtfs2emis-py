@@ -1,0 +1,18 @@
+CARB EMFAC (EMFAC2017) emission factors
+========================================
+
+Source: California Air Resources Board
+https://ww2.arb.ca.gov/emfac
+
+This table is NOT redistributed in the wheel. The Python loader fetches it only
+on request (`load_ef_table("usa_emfac", fetch=True)`), downloading the original
+pinned `.rda` from the URL recorded in `manifest.json`.
+
+CARB's public documentation does not state a data licence; the terms are in the
+EMFAC software installation package/EULA. Until that EULA is reviewed and
+recorded here, the table is treated as not redistributable. Attribution alone is
+not permission.
+
+The reference table was obtained through ipeaGIT/gtfs2emis v0.1.2 (MIT code),
+commit 0dbca7d779857145888ab695f36dc9e71ff57d98. The R package's MIT licence
+covers its code, not the CARB data.

@@ -1,0 +1,23 @@
+name: Locate package root
+description: >-
+  Detect whether the Python package sits at the repository root or in the
+  gtfs2emis-py/ subdirectory, so one workflow serves both the development tree
+  and the release repository.
+
+outputs:
+  dir:
+    description: Directory that contains pyproject.toml
+    value: ${{ steps.detect.outputs.dir }}
+
+runs:
+  using: composite
+  steps:
+    - name: Detect the package root
+      id: detect
+      shell: bash
+      run: |
+        if [ -f gtfs2emis-py/pyproject.toml ]; then
+          echo "dir=gtfs2emis-py" >> "$GITHUB_OUTPUT"
+        else
+          echo "dir=." >> "$GITHUB_OUTPUT"
+        fi

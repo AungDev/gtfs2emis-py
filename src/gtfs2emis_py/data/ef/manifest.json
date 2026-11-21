@@ -1,0 +1,380 @@
+{
+  "schema_version": 1,
+  "tables": {
+    "brazil_cetesb": {
+      "file": "brazil_cetesb.parquet",
+      "r_object": "ef_brazil_cetesb_db",
+      "rows": 1098,
+      "columns": 9,
+      "sha256": "743fd2c3dd4e757e0044097b89b609fb4c357c8f8dd7f668f767f3a9e3f1c252",
+      "content_sha256": "e9ce73111fece58bca034177556b16be60648424c7a645c26fb3f7250f1931f3",
+      "source": "CETESB",
+      "edition": "CETESB 2019",
+      "source_url": [
+        "https://cetesb.sp.gov.br/veicular/",
+        "https://github.com/ipeaGIT/gtfs2emis/tree/master/data"
+      ],
+      "retrieved": "2026-11-14",
+      "licence": "NOASSERTION (see LICENSES/brazil_cetesb.txt)",
+      "build_script": "data-raw/ef_brazil_cetesb_db.py",
+      "raw_inputs": [
+        {
+          "name": "ef_brazil_cetesb_db.rda",
+          "sha256": "c7a847b64068d36c76b2f774576e6183c00ae48fa68086a27e699da9fcd871cc",
+          "origin": "https://raw.githubusercontent.com/ipeaGIT/gtfs2emis/0dbca7d779857145888ab695f36dc9e71ff57d98/data/ef_brazil_cetesb_db.rda"
+        }
+      ],
+      "pyarrow_version": "26.0.0",
+      "schema": [
+        {
+          "name": "calendar_year",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "model_year",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "pollutant",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "Proconve_HDV",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "Euro_EqHDV",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "BUS_URBAN_D",
+          "type": "double",
+          "nullable": true
+        },
+        {
+          "name": "BUS_MICRO_D",
+          "type": "double",
+          "nullable": true
+        },
+        {
+          "name": "BUS_COACH_D",
+          "type": "double",
+          "nullable": true
+        },
+        {
+          "name": "BUS_ARTIC_D",
+          "type": "double",
+          "nullable": true
+        }
+      ],
+      "remote": {
+        "file": "brazil_cetesb.parquet",
+        "sha256": "743fd2c3dd4e757e0044097b89b609fb4c357c8f8dd7f668f767f3a9e3f1c252",
+        "url": "https://raw.githubusercontent.com/ipeaGIT/gtfs2emis/0dbca7d779857145888ab695f36dc9e71ff57d98/data/ef_brazil_cetesb_db.rda",
+        "format": "rda",
+        "raw_file": "ef_brazil_cetesb_db.rda",
+        "raw_sha256": "c7a847b64068d36c76b2f774576e6183c00ae48fa68086a27e699da9fcd871cc",
+        "base_url_env": "GTFS2EMIS_DATA_URL"
+      }
+    },
+    "europe_emep": {
+      "file": "europe_emep.parquet",
+      "r_object": "ef_europe_emep_db",
+      "rows": 9913,
+      "columns": 22,
+      "sha256": "f7ac7560dd106cb024ba061f2e4eff80d0945439acb69dea06b347078fad7c5d",
+      "content_sha256": "a518fa2e61afbbfd219fd3fc48ac13b2e150042a6ed7b6c7302473f1cb6ef7aa",
+      "source": "EMEP/EEA",
+      "edition": "EMEP/EEA 2019",
+      "source_url": [
+        "https://www.eea.europa.eu/publications/emep-eea-guidebook-2019",
+        "https://github.com/ipeaGIT/gtfs2emis/tree/master/data"
+      ],
+      "retrieved": "2026-11-14",
+      "licence": "CC-BY-4.0 (see LICENSES/europe_emep.txt)",
+      "build_script": "data-raw/ef_europe_emep_db.py",
+      "raw_inputs": [
+        {
+          "name": "ef_europe_emep_db.rda",
+          "sha256": "1a7d7c8aa5ac6dcdba0eb3324073c30bb1bd6332b638767a7d2c3467a9a5cfee",
+          "origin": "https://raw.githubusercontent.com/ipeaGIT/gtfs2emis/0dbca7d779857145888ab695f36dc9e71ff57d98/data/ef_europe_emep_db.rda"
+        }
+      ],
+      "pyarrow_version": "26.0.0",
+      "schema": [
+        {
+          "name": "Category",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "Fuel",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "Segment",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "Euro",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "Technology",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "Pol",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "Slope",
+          "type": "double",
+          "nullable": false
+        },
+        {
+          "name": "Load",
+          "type": "double",
+          "nullable": false
+        },
+        {
+          "name": "Vmin",
+          "type": "double",
+          "nullable": false
+        },
+        {
+          "name": "Vmax",
+          "type": "double",
+          "nullable": false
+        },
+        {
+          "name": "Alpha",
+          "type": "double",
+          "nullable": false
+        },
+        {
+          "name": "Beta",
+          "type": "double",
+          "nullable": false
+        },
+        {
+          "name": "Gamma",
+          "type": "double",
+          "nullable": false
+        },
+        {
+          "name": "Delta",
+          "type": "double",
+          "nullable": true
+        },
+        {
+          "name": "Epsilon",
+          "type": "double",
+          "nullable": true
+        },
+        {
+          "name": "Zita",
+          "type": "double",
+          "nullable": false
+        },
+        {
+          "name": "Hta",
+          "type": "double",
+          "nullable": false
+        },
+        {
+          "name": "RF",
+          "type": "double",
+          "nullable": false
+        },
+        {
+          "name": "Function",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "Function_ID",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "k",
+          "type": "double",
+          "nullable": false
+        },
+        {
+          "name": "Thita",
+          "type": "double",
+          "nullable": false
+        }
+      ]
+    },
+    "usa_emfac": {
+      "file": "usa_emfac.parquet",
+      "r_object": "ef_usa_emfac_db",
+      "rows": 79198,
+      "columns": 8,
+      "sha256": "49c46b98aed0cb84868a0946a92603611b18f3ad7920068f04edb6547bd0e12d",
+      "content_sha256": "1cdc0757185e3a3e983418d2833c96576f16d39e5ee56bb2d5a7dedeca5f9433",
+      "source": "CARB EMFAC",
+      "edition": "EMFAC2017",
+      "source_url": [
+        "https://ww2.arb.ca.gov/emfac",
+        "https://github.com/ipeaGIT/gtfs2emis/tree/master/data"
+      ],
+      "retrieved": "2026-11-14",
+      "licence": "NOASSERTION (see LICENSES/usa_emfac.txt)",
+      "build_script": "data-raw/ef_usa_emfac_db.py",
+      "raw_inputs": [
+        {
+          "name": "ef_usa_emfac_db.rda",
+          "sha256": "721452a1d71e9ad3e92ebe87767f7ebbb4394e04611de952a7e21a161f0a675b",
+          "origin": "https://raw.githubusercontent.com/ipeaGIT/gtfs2emis/0dbca7d779857145888ab695f36dc9e71ff57d98/data/ef_usa_emfac_db.rda"
+        }
+      ],
+      "pyarrow_version": "26.0.0",
+      "schema": [
+        {
+          "name": "reference_year",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "model_year",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "fuel",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "vkt",
+          "type": "double",
+          "nullable": false
+        },
+        {
+          "name": "ef",
+          "type": "double",
+          "nullable": false
+        },
+        {
+          "name": "pollutant",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "lower_speed_interval",
+          "type": "double",
+          "nullable": false
+        },
+        {
+          "name": "upper_speed_interval",
+          "type": "double",
+          "nullable": false
+        }
+      ],
+      "remote": {
+        "file": "usa_emfac.parquet",
+        "sha256": "49c46b98aed0cb84868a0946a92603611b18f3ad7920068f04edb6547bd0e12d",
+        "url": "https://raw.githubusercontent.com/ipeaGIT/gtfs2emis/0dbca7d779857145888ab695f36dc9e71ff57d98/data/ef_usa_emfac_db.rda",
+        "format": "rda",
+        "raw_file": "ef_usa_emfac_db.rda",
+        "raw_sha256": "721452a1d71e9ad3e92ebe87767f7ebbb4394e04611de952a7e21a161f0a675b",
+        "base_url_env": "GTFS2EMIS_DATA_URL"
+      }
+    },
+    "usa_moves": {
+      "file": "usa_moves.parquet",
+      "r_object": "ef_usa_moves_db",
+      "rows": 198144,
+      "columns": 9,
+      "sha256": "583cc63ec7c9ce9cc84cc4a791719eb2809d657ec237a3b2840ea0cfa73bcb1f",
+      "content_sha256": "e854842b623cfff3bf41d76460af39d67206201dd251b8a4ce0bdc233162d222",
+      "source": "EPA MOVES",
+      "edition": "MOVES3",
+      "source_url": [
+        "https://www.epa.gov/moves",
+        "https://github.com/ipeaGIT/gtfs2emis/tree/master/data"
+      ],
+      "retrieved": "2026-11-14",
+      "licence": "NOASSERTION (GPL-derived; see LICENSES/usa_moves.txt)",
+      "build_script": "data-raw/ef_usa_moves_db.py",
+      "raw_inputs": [
+        {
+          "name": "ef_usa_moves_db.rda",
+          "sha256": "1b46c08f229211c9cf8ad9766edbf7ec0086e9aecc590f8f5be0cb5f01c95267",
+          "origin": "https://raw.githubusercontent.com/ipeaGIT/gtfs2emis/0dbca7d779857145888ab695f36dc9e71ff57d98/data/ef_usa_moves_db.rda"
+        }
+      ],
+      "pyarrow_version": "26.0.0",
+      "schema": [
+        {
+          "name": "fuel_type",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "reference_year",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "model_year",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "pollutant",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "lower_speed_interval",
+          "type": "double",
+          "nullable": false
+        },
+        {
+          "name": "upper_speed_interval",
+          "type": "double",
+          "nullable": false
+        },
+        {
+          "name": "ef",
+          "type": "double",
+          "nullable": false
+        },
+        {
+          "name": "source_type",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "id_speed",
+          "type": "int32",
+          "nullable": false
+        }
+      ],
+      "remote": {
+        "file": "usa_moves.parquet",
+        "sha256": "583cc63ec7c9ce9cc84cc4a791719eb2809d657ec237a3b2840ea0cfa73bcb1f",
+        "url": "https://raw.githubusercontent.com/ipeaGIT/gtfs2emis/0dbca7d779857145888ab695f36dc9e71ff57d98/data/ef_usa_moves_db.rda",
+        "format": "rda",
+        "raw_file": "ef_usa_moves_db.rda",
+        "raw_sha256": "1b46c08f229211c9cf8ad9766edbf7ec0086e9aecc590f8f5be0cb5f01c95267",
+        "base_url_env": "GTFS2EMIS_DATA_URL"
+      }
+    }
+  }
+}

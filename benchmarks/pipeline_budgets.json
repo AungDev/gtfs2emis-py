@@ -1,0 +1,7 @@
+{
+  "transport_ms": 600000,
+  "emission_ms": 600000,
+  "writer_ms": 120000,
+  "peak_rss_mb": 6144,
+  "output_bytes": 500000000
+}

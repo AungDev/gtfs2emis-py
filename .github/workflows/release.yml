@@ -1,0 +1,92 @@
+name: Release
+
+# Runs in the public release repository
+# https://github.com/AungDev/gtfs2emis-py on a v* tag. The package root is
+# detected below, so the workflow works both with the package at the repository
+# root and with it in a gtfs2emis-py/ subdirectory.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build and smoke-test the artifacts
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.13.8"
+          enable-cache: true
+      - name: Locate the package root
+        id: pkg
+        shell: bash
+        run: |
+          if [ -f gtfs2emis-py/pyproject.toml ]; then
+            echo "dir=gtfs2emis-py" >> "$GITHUB_OUTPUT"
+          else
+            echo "dir=." >> "$GITHUB_OUTPUT"
+          fi
+      - name: Build sdist and wheel
+        shell: bash
+        run: |
+          cd "${{ steps.pkg.outputs.dir }}"
+          uv sync --locked --extra dev
+          uv build --out-dir dist
+      - name: Smoke-test the wheel in a clean environment
+        shell: bash
+        run: |
+          cd "${{ steps.pkg.outputs.dir }}"
+          uv venv /tmp/release-env --python 3.12
+          uv pip install --python /tmp/release-env/bin/python dist/*.whl
+          /tmp/release-env/bin/python - <<'PY'
+          from importlib import resources
+
+          from gtfs2emis_py import __version__
+          from gtfs2emis_py.ef import EFDataError, load_ef_table
+
+          table = load_ef_table("europe_emep")
+          assert table.shape == (9913, 22), table.shape
+          data = resources.files("gtfs2emis_py").joinpath("data", "ef")
+          assert data.joinpath("manifest.json").is_file()
+          assert data.joinpath("LICENSES").is_dir()
+          assert resources.files("gtfs2emis_py").joinpath("NOTICE").is_file()
+          try:
+              load_ef_table("usa_emfac")
+          except EFDataError as exc:
+              assert "fetch=True" in str(exc)
+          else:
+              raise AssertionError("usa_emfac must not be packaged")
+          print(f"gtfs2emis-py {__version__}: wheel smoke test passed")
+          PY
+      - name: Upload the release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: gtfs2emis-py-${{ github.ref_name }}
+          path: ${{ steps.pkg.outputs.dir }}/dist/*
+          if-no-files-found: error
+
+  # Trusted publishing is wired here but stays skipped until the public PyPI
+  # project and the `pypi` environment exist: set the repository variable
+  # PYPI_PUBLISH=true and configure the trusted publisher on PyPI.
+  publish:
+    name: Publish to PyPI (trusted publishing)
+    needs: build
+    if: vars.PYPI_PUBLISH == 'true'
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: gtfs2emis-py-${{ github.ref_name }}
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@release/v1

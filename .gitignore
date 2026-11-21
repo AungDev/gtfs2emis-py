@@ -1,0 +1,25 @@
+# Python build artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+.build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+
+# Coverage output (the gate lives in pyproject.toml, the report is disposable)
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# EF build inputs: downloaded raw R .rda files
+**/data-raw/raw/
+
+# Sphinx output
+**/docs/_build/
+
+# Local R toolchain used for parity fixtures
+.tools/

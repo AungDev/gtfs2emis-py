@@ -1,0 +1,46 @@
+NOTICE
+======
+
+gtfs2emis-py is a Python port of the R package gtfs2emis:
+https://github.com/ipeaGIT/gtfs2emis
+
+The R package is licensed under the MIT License. Its copyright and permission
+notice is reproduced here because substantial portions of this port are derived
+from it:
+
+    Copyright (c) 2022 Ipea
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to
+    deal in the Software without restriction, including without limitation the
+    rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+    sell copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+    DEALINGS IN THE SOFTWARE.
+
+Emission-factor data
+--------------------
+
+The Python code is MIT-licensed. Emission-factor data is not covered by that
+licence; each source retains its own terms.
+
+- EMEP/EEA: the European Environment Agency publishes this material under
+  CC-BY 4.0. The packaged `europe_emep.parquet` table is a transformation of the
+  EMEP/EEA guidebook data and is redistributed with attribution. See
+  `data/ef/LICENSES/europe_emep.txt`.
+
+- CETESB, CARB EMFAC and EPA MOVES: these tables are not redistributed in the
+  wheel. `load_ef_table` fetches them only on request from a owner-configured
+  data location and verifies the pinned SHA-256. Their source terms are recorded
+  in `data/ef/LICENSES/` and in `manifest.json`; obtaining or using those tables
+  remains the user's responsibility under the source owner's terms.

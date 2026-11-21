@@ -1,0 +1,25 @@
+EMEP/EEA air pollutant emission inventory guidebook (2019)
+============================================================
+
+Source: European Environment Agency
+https://www.eea.europa.eu/publications/emep-eea-guidebook-2019
+
+The packaged `europe_emep.parquet` table is a transformation of emission-factor
+data derived from the EMEP/EEA guidebook. It is redistributed under the EEA
+legal notice / Creative Commons Attribution 4.0 International (CC-BY 4.0)
+terms: https://www.eea.europa.eu/en/legal-notice
+
+Attribution: European Environment Agency (EEA), EMEP/EEA air pollutant emission
+inventory guidebook 2019.
+
+Changes: the guidebook workbook was converted to a Parquet table, column names
+were preserved from the R reference where practical, and rows were merged across
+the 2007/2013/2016/2019 editions used by the reference package.
+
+The EEA notice excludes third-party content from its CC-BY permission. Users
+must check the guidebook's own copyright page for any third-party material
+before redistributing this table further.
+
+The table was obtained through ipeaGIT/gtfs2emis v0.1.2 (MIT code), commit
+0dbca7d779857145888ab695f36dc9e71ff57d98. The R package's MIT licence covers its
+code, not the underlying EEA data; this notice governs the data.
