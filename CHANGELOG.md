@@ -20,6 +20,8 @@ All notable changes to this project are recorded here. The format follows
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-21
+
 ### Added
 
 - GTFS reader wrapper with structural validation, ID normalisation, typed
@@ -67,5 +69,14 @@ All notable changes to this project are recorded here. The format follows
 
 ### Notes
 
-- This is a development snapshot; parity fixtures
-  are still outstanding, so the package is not yet a complete emissions estimator.
+- Exact numerical parity with `gtfs2emis` 0.1.2 at commit `0dbca7d` for transport
+  and emission outputs. Timestamp columns are a recorded structural divergence:
+  the pinned R release's `adjust_speed()` carries a bug fixed later upstream, so
+  this port implements the documented construction from `service_date` and
+  `cumtime` rather than reproducing the old behaviour.
+- The wheel carries the EMEP/EEA table only. CETESB, EMFAC and MOVES are fetched on
+  demand with `load_ef_table(name, fetch=True)` and verified against the pinned URL
+  and SHA-256 recorded in the manifest.
+- Bus-only hot exhaust plus the EMEP tyre, brake and road wear processes. Rail, cold
+  start, evaporative emissions, resuspension, uncertainty and a command-line
+  interface are out of scope.
