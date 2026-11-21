@@ -73,9 +73,9 @@ jobs:
           path: ${{ steps.pkg.outputs.dir }}/dist/*
           if-no-files-found: error
 
-  # Trusted publishing is wired here but stays skipped until the public PyPI
-  # project and the `pypi` environment exist: set the repository variable
-  # PYPI_PUBLISH=true and configure the trusted publisher on PyPI.
+  # Trusted publishing is configured: the PyPI project, the `pypi` environment
+  # and the repository variable PYPI_PUBLISH are in place. This job waits for
+  # the environment's required reviewer before it uploads.
   publish:
     name: Publish to PyPI (trusted publishing)
     needs: build
