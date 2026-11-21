@@ -4,6 +4,12 @@ name: Release
 # https://github.com/AungDev/gtfs2emis-py on a v* tag. The package root is
 # detected below, so the workflow works both with the package at the repository
 # root and with it in a gtfs2emis-py/ subdirectory.
+#
+# PyPI authorises this job as a trusted publisher: project `gtfs2emis-py`,
+# owner/repository `AungDev/gtfs2emis-py`, workflow `release.yml`, environment
+# `pypi`. Change any of those four values and the matching entry in the project's
+# publishing settings must change with it, or this job fails with 403 before it
+# uploads anything.
 on:
   push:
     tags: ["v*"]
